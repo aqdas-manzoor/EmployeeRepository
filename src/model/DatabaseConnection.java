@@ -15,8 +15,8 @@ public class DatabaseConnection {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static int insertEmployee(Employee employee) throws SQLException {
-        String query = "INSERT INTO employees (name, age, salary, email, phone_number) VALUES (?, ?, ?, ?, ?)";
+    public static int insertEmployee(Employee employee, int departmentId) throws SQLException {
+        String query = "INSERT INTO employees (name, age, salary, email, phone_number, department_id) VALUES (?, ?, ?, ?, ?,?)";
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -25,6 +25,7 @@ public class DatabaseConnection {
             stmt.setInt(3, employee.getSalary());
             stmt.setString(4, employee.getEmail());
             stmt.setString(5, employee.getNumber());
+            stmt.setInt(6, departmentId);
 
             int affectedRows = stmt.executeUpdate();
 
@@ -52,5 +53,24 @@ public class DatabaseConnection {
 
             stmt.executeUpdate();
         }
+    }
+    public static int insertDepartment(Department department ) throws SQLException {
+        String query = "INSERT INTO departments(department_name) VALUES (?)";
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, department.getDepartmentName());
+
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                var rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return -1;
     }
 }

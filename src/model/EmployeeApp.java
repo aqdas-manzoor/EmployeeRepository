@@ -147,10 +147,17 @@ public class EmployeeApp {
         System.out.println("Department Name: " + employee.getDepartment().getDepartmentName());
 
         try {
-            int employeeId = DatabaseConnection.insertEmployee(employee);
+           int departmentId = DatabaseConnection.insertDepartment(employee.getDepartment());
+            if (departmentId == -1) {
+                System.out.println("Failed to insert department.");
+                return;
+            }
+            int employeeId = DatabaseConnection.insertEmployee(employee, departmentId);
             if (employeeId != -1) {
                 DatabaseConnection.insertAddress(employee.getAddress(), employeeId);
                 System.out.println("Employee and Address details successfully inserted into the database!");
+            } else {
+                System.out.println("Failed to insert employee.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
