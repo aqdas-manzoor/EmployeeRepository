@@ -1,24 +1,18 @@
-//using lambda expression
+
 interface FunctionalInterface {
-    int add(int a, int b);
-
-
+    void say();
 }
- class FunctionalInterfaceExample {
 
-    void method1(){
-        FunctionalInterface calculator = (a, b) -> a + b; //lambda expression
-        System.out.println(calculator.add(5,3));
+class FunctionalInterfaceExample {
+    static void saySomething() {
+        System.out.println("Hello World");
+    }
 
+    public static void main(String[] args) {
+        FunctionalInterface calculator = () -> System.out.println("Hello World");
+        calculator.say();
+        FunctionalInterface functionalInterface= FunctionalInterfaceExample::saySomething;
+        functionalInterface.say();
 
     }
-    public static void main(String[] args) {
-        FunctionalInterfaceExample obj1 = new FunctionalInterfaceExample();
-        obj1.method1();
 }
-}
-
-
-
-
-
