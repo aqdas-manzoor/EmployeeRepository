@@ -156,6 +156,7 @@ public class EmployeeApp {
             if (employeeId != -1) {
                 DatabaseConnection.insertAddress(employee.getAddress(), employeeId);
                 System.out.println("Employee and Address details successfully inserted into the database!");
+                DatabaseConnection.displayEmployeeDetails(employeeId);
             } else {
                 System.out.println("Failed to insert employee.");
             }
@@ -164,6 +165,5 @@ public class EmployeeApp {
             System.out.println("Error inserting data into the database.");
         }
     }
-
 
 }
