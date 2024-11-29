@@ -27,10 +27,8 @@ public class ListPractice {
 //        linkedList.add(8);
 //        System.out.println(linkedList );
       //deque use when we want to add the value from both side
+        //deque mei dono side se hm add kar sakte hai element
         Deque<Integer> deque = new LinkedList<>();
-//        deque.push(1);
-//        deque.push(2);
-//        deque.push(3);
         // push is same as addFirst in deque  ... frontend se add ho ga
         deque.push(1);
         deque.push(2);
@@ -49,9 +47,12 @@ public class ListPractice {
         System.out.println(deque);
         deque.removeLast();
         System.out.println(deque);
+        deque.addLast(100);
+        System.out.println(deque);
         // it return the element but not remove from the list
         System.out.println(deque.peekFirst());
         System.out.println(deque.peekLast());
+        System.out.println(deque.peek());
         System.out.println(deque);
 
         List<Integer> vector = new Vector<>();
@@ -82,7 +83,7 @@ public class ListPractice {
         System.out.println(stack);
          stack.search("Apple");
          //if we want the position lf Apple the we see it from right side and start from 1 index
-        System.out.println( stack.search("Apple"));
+        System.out.println(stack.search("Apple"));
     }
 
 
