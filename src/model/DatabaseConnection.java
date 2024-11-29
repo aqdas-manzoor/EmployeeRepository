@@ -72,7 +72,7 @@ public class DatabaseConnection {
     }
 
     public static void displayEmployeeDetails(int employeeId) throws SQLException {
-        String query =  "SELECT e.id, e.name, e.age, e.salary, e.email, e.phone_number, d.department_name, " +
+        String query = "SELECT e.id, e.name, e.age, e.salary, e.email, e.phone_number, d.department_name, " +
                 "a.street, a.city, a.state, a.zip_code " +
                 "FROM employees e " +
                 "JOIN departments d ON e.department_id = d.id " +
