@@ -4,28 +4,28 @@ public class ListPractice {
 
     public static void main(String[] args) {
         //f you have a lot of random access to elements
-//        List<String> arraylist=new ArrayList<>();
-//        arraylist.add("Aqdas");
-//        arraylist.add("Qalb");
-//        arraylist.add("Qalb");
-//        arraylist.add("Ahmad");
-//        arraylist.add("Mama");
-//        arraylist.add("papa");
-//        arraylist.add("papa");
-//        arraylist.add(2,"Aqii");
-//        System.out.println(arraylist);
+        List<String> arraylist=new ArrayList<>();
+        arraylist.add("Aqdas");
+        arraylist.add("Qalb");
+        arraylist.add("Qalb");
+        arraylist.add("Ahmad");
+        arraylist.add("Mama");
+        arraylist.add("papa");
+        arraylist.add("papa");
+        arraylist.add(2,"Aqii");
+        System.out.println(arraylist);
 
         // f your use case involves frequent insertions and deletions
-//        List<Integer> linkedList=new LinkedList<>();
-//        linkedList.add(1);
-//        linkedList.add(2);
-//        linkedList.add(3);
-//        linkedList.add(3);
-//        linkedList.add(5);
-//        linkedList.add(6);
-//        linkedList.add(7);
-//        linkedList.add(8);
-//        System.out.println(linkedList );
+        List<Integer> linkedList=new LinkedList<>();
+        linkedList.add(1);
+        linkedList.add(2);
+        linkedList.add(3);
+        linkedList.add(3);
+        linkedList.add(5);
+        linkedList.add(6);
+        linkedList.add(7);
+        linkedList.add(8);
+        System.out.println(linkedList );
       //deque use when we want to add the value from both side
         //deque mei dono side se hm add kar sakte hai element
         Deque<Integer> deque = new LinkedList<>();
@@ -85,6 +85,7 @@ public class ListPractice {
          //if we want the position lf Apple the we see it from right side and start from 1 index
         System.out.println(stack.search("Apple"));
     }
+
 
 
 }

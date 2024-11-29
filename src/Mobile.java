@@ -35,7 +35,7 @@ class OnePlusMobileFactory implements MobileFactory {
 }
 
 // Client Code
- class Main2 {
+ class AbstractClientCode {
     public static void main(String[] args) {
         // Using IPhoneFactory to create an IPhone
         MobileFactory iphoneFactory = new IPhoneMobileFactory();
