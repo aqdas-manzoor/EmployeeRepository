@@ -7,6 +7,8 @@ import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
 
+import static java.lang.reflect.Array.get;
+
 public class EmployeeApp {
 
     private static Properties properties = new Properties();
@@ -124,23 +126,59 @@ public class EmployeeApp {
         employee.setNumber(number);
         System.out.println("number: " + employee.getNumber());
 
-        String street = getValidStringInput(scanner, "Enter street: ");
-        employee.getAddress().setStreet(street);
-        System.out.println("street: " + employee.getAddress().getStreet());
+//        String addressType = getValidStringInput(scanner, "Enter Address Type: ");
+//        employee.getAddress().add(addressType);
+//        System.out.println("State: " + employee.getAddress().get(addressType));
+//        employee.getAddress().setAddressType(addressType);
+//
+//        String street = getValidStringInput(scanner, "Enter street: ");
+//        employee.getAddress().setStreet(street);
+//        System.out.println("street: " + employee.getAddress().getStreet());
+//
+//        String city = getValidStringInput(scanner, "Enter city: ");
+//        employee.getAddress().setCity(city);
+//        System.out.println("City: " + employee.getAddress().getCity());
+//
+//
+//        String state = getValidStringInput(scanner, "Enter state: ");
+//        employee.getAddress().setState(state);
+//        System.out.println("State: " + employee.getAddress().getState());
+//
+//        int zipCode = getValidIntInput(scanner, "Enter zip code: ");
+//        employee.getAddress().setZipCode(zipCode);
+//        System.out.println("Zip Code: " + employee.getAddress().getZipCode());
 
-        String city = getValidStringInput(scanner, "Enter city: ");
-        employee.getAddress().setCity(city);
-        System.out.println("City: " + employee.getAddress().getCity());
+        // Add addresses using Employee's method
+        boolean addingAddresses = true;
+        while (addingAddresses) {
+            // Collect address details
+            String addressType = getValidStringInput(scanner, "Enter Address Type (e.g., Home, Office, Private, Public): ");
+            String street = getValidStringInput(scanner, "Enter street: ");
+            String city = getValidStringInput(scanner, "Enter city: ");
+            String state = getValidStringInput(scanner, "Enter state: ");
+            int zipCode = getValidIntInput(scanner, "Enter zip code: ");
 
+            // Use Employee's method to add the address
+            employee.addAddressFromInput(addressType, street, city, state, zipCode);
+            System.out.println("Address added!");
 
-        String state = getValidStringInput(scanner, "Enter state: ");
-        employee.getAddress().setState(state);
-        System.out.println("State: " + employee.getAddress().getState());
+            // Ask if the user wants to add another address
+            String continueAdding = getValidStringInput(scanner, "Would you like to add another address? (yes/no): ");
+            if (!continueAdding.equalsIgnoreCase("yes")) {
+                addingAddresses = false;
+            }
+        }
 
-        int zipCode = getValidIntInput(scanner, "Enter zip code: ");
-        employee.getAddress().setZipCode(zipCode);
-        System.out.println("Zip Code: " + employee.getAddress().getZipCode());
-
+        // Print all added addresses
+        System.out.println("\nEmployee Addresses:");
+        for (Address addr : employee.getAddress()) {
+            System.out.println("Address Type: " + addr.getAddressType());
+            System.out.println("Street: " + addr.getStreet());
+            System.out.println("City: " + addr.getCity());
+            System.out.println("State: " + addr.getState());
+            System.out.println("Zip Code: " + addr.getZipCode());
+            System.out.println("---");
+        }
 
         String department = getValidStringInput(scanner, "Enter department name: ");
         employee.getDepartment().setDepartmentName(department);
@@ -154,7 +192,9 @@ public class EmployeeApp {
             }
             int employeeId = DatabaseConnection.insertEmployee(employee, departmentId);
             if (employeeId != -1) {
-                DatabaseConnection.insertAddress(employee.getAddress(), employeeId);
+                for (Address addr : employee.getAddress()) {
+                    DatabaseConnection.insertAddress(addr, employeeId);
+                }
                 System.out.println("Employee and Address details successfully inserted into the database!");
                 DatabaseConnection.displayEmployeeDetails(employeeId);
             } else {

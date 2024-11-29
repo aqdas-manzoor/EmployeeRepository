@@ -3,6 +3,7 @@ package model;
 public class Address {
 
     private String street;
+    private String addressType;
     private String city;
     private String state;
     private int zipCode;
@@ -23,7 +24,13 @@ public class Address {
     public int getZipCode() {
         return zipCode;
     }
+    public String getAddressType() {
+        return addressType;
+    }
 
+    public void setAddressType(String addressType) {
+        this.addressType = addressType;
+    }
 
     public void setStreet(String street) {
         this.street = street;

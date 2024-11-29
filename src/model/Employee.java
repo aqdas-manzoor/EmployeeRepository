@@ -1,16 +1,19 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Employee {
     private int age;
     private String name;
     private int salary;
     private String number;
     private String email;
-    private Address address;
+    private List<Address> address;
     private Department department;
 
     public Employee() {
-        address = new Address();
+        address = new ArrayList<>();
         department = new Department();
     }
 
@@ -54,10 +57,19 @@ public class Employee {
         return salary;
     }
 
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
+    public void addAddressFromInput(String addressType, String street, String city, String state, int zipCode) {
+        Address address = new Address();
+        address.setAddressType(addressType);
+        address.setStreet(street);
+        address.setCity(city);
+        address.setState(state);
+        address.setZipCode(zipCode);
+        this.address.add(address);
+    }
     public Department getDepartment() {
         return department;
     }
