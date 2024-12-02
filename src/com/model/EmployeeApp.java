@@ -120,9 +120,6 @@ public class EmployeeApp {
         employee.setEmail(email);
         System.out.println("email: " + employee.getEmail());
 
-        String number = getValidPhoneNumber(scanner, "Enter Number: ");
-        employee.setNumber(number);
-        System.out.println("number: " + employee.getNumber());
 
         // Add addresses using Employee's method
         boolean addingAddresses = true;
@@ -132,9 +129,10 @@ public class EmployeeApp {
             String street = getValidStringInput(scanner, "Enter street: ");
             String city = getValidStringInput(scanner, "Enter city: ");
             String state = getValidStringInput(scanner, "Enter state: ");
+            String number = getValidStringInput(scanner, "Enter number: ");
             int zipCode = getValidIntInput(scanner, "Enter zip code: ");
 
-            employee.addAddressFromInput(addressType, street, city, state, zipCode);
+            employee.addAddressFromInput(addressType, street, city, state, number,zipCode);
             System.out.println("Address added!");
 
             String continueAdding = getValidStringInput(scanner, "Would you like to add another address? (yes/no): ");
@@ -150,6 +148,7 @@ public class EmployeeApp {
             System.out.println("Street: " + addr.getStreet());
             System.out.println("City: " + addr.getCity());
             System.out.println("State: " + addr.getState());
+            System.out.println("Number: " + addr.getNumber());
             System.out.println("Zip Code: " + addr.getZipCode());
             System.out.println("---");
         }

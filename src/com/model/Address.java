@@ -7,6 +7,7 @@ public class Address {
     private String city;
     private String state;
     private int zipCode;
+    private String number;
 
 
     public String getStreet() {
@@ -24,12 +25,21 @@ public class Address {
     public int getZipCode() {
         return zipCode;
     }
+
     public String getAddressType() {
         return addressType;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
     public void setAddressType(String addressType) {
         this.addressType = addressType;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public void setStreet(String street) {

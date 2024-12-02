@@ -14,7 +14,7 @@ public class DatabaseConnection {
     }
 
     public static int insertEmployee(Employee employee) throws SQLException {
-        String query = "INSERT INTO employees (name, age, salary, email, phone_number) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO employees (name, age, salary, email) VALUES (?, ?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -22,7 +22,6 @@ public class DatabaseConnection {
             stmt.setInt(2, employee.getAge());
             stmt.setInt(3, employee.getSalary());
             stmt.setString(4, employee.getEmail());
-            stmt.setString(5, employee.getNumber());
 
 
             int affectedRows = stmt.executeUpdate();
@@ -54,7 +53,7 @@ public class DatabaseConnection {
     }
 
     public static void insertAddress(Address address, int employeeId) throws SQLException {
-        String query = "INSERT INTO address (employee_id, street, city, state, zip_code,address_type) VALUES (?, ?, ?, ?, ?,?)";
+        String query = "INSERT INTO address (employee_id, street, city, state, zip_code,address_type,phone_number) VALUES (?, ?, ?, ?, ?,?,?)";
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -64,6 +63,7 @@ public class DatabaseConnection {
             stmt.setString(4, address.getState());
             stmt.setInt(5, address.getZipCode());
             stmt.setString(6, address.getAddressType());
+            stmt.setString(7, address.getNumber());
 
             stmt.executeUpdate();
         }
@@ -92,9 +92,8 @@ public class DatabaseConnection {
 
     public static void displayEmployeeDetails(int employeeId) throws SQLException {
         String query = "SELECT e.id, \n" + " e.name, \n" + " e.age, \n" + " e.salary, \n" + " e.email, \n" +
-                " e.phone_number,\n" +
                 "  GROUP_CONCAT(DISTINCT d.department_name ORDER BY d.department_name) AS department_names,\n" +
-                "  GROUP_CONCAT(DISTINCT CONCAT(a.address_type, ': ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code) \n" +
+                "  GROUP_CONCAT(DISTINCT CONCAT(a.address_type, ': ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ', a.phone_number) \n" +
                 "  ORDER BY a.address_type SEPARATOR ' | ') AS addresses\n" +
                 "FROM employees e\n" +
                 "LEFT JOIN employee_departments ed ON e.id = ed.employee_id\n" +
@@ -116,7 +115,6 @@ public class DatabaseConnection {
                     System.out.println("Age: " + rs.getInt("age"));
                     System.out.println("Salary: " + rs.getInt("salary"));
                     System.out.println("Email: " + rs.getString("email"));
-                    System.out.println("Phone Number: " + rs.getString("phone_number"));
 
                     System.out.println("Departments: " + rs.getString("department_names"));
                     System.out.println("Addresses: " + rs.getString("addresses"));
@@ -134,7 +132,7 @@ public class DatabaseConnection {
 
     public static void displayEmployeeAddresses(int employeeId) throws SQLException {
         String query = "SELECT e.id, e.name, " +
-                "GROUP_CONCAT(CONCAT(a.address_type, ' ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code) " +
+                "GROUP_CONCAT(CONCAT(a.address_type, ' ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ' ,a.phone_number) " +
                 "ORDER BY a.address_type SEPARATOR ' | ') AS addresses " +
                 "FROM employees e " +
                 "LEFT JOIN address a ON e.id = a.employee_id " +

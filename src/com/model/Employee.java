@@ -7,7 +7,6 @@ public class Employee {
     private int age;
     private String name;
     private int salary;
-    private String number;
     private String email;
     private List<Address> address;
     private List<Department> departmentList;
@@ -19,10 +18,6 @@ public class Employee {
 
     public void setSalary(int salary) {
         this.salary = salary;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public void setName(String name) {
@@ -41,10 +36,6 @@ public class Employee {
         return name;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -61,12 +52,13 @@ public class Employee {
         return address;
     }
 
-    public void addAddressFromInput(String addressType, String street, String city, String state, int zipCode) {
+    public void addAddressFromInput(String addressType, String street, String city, String state, String number, int zipCode) {
         Address address = new Address();
         address.setAddressType(addressType);
         address.setStreet(street);
         address.setCity(city);
         address.setState(state);
+        address.setNumber(number);
         address.setZipCode(zipCode);
         this.address.add(address);
     }

@@ -5,7 +5,6 @@ import java.util.List;
 public class Department {
     private int id;
     private String departmentName;
-//    private List<Employee> employeeList;
 
     public String getDepartmentName() {
 
@@ -16,13 +15,6 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-//    public void addEmployee(Employee employee) {
-//        this.employeeList.add(employee);
-//    }
-
-//    public List<Employee> getEmployees() {
-//        return employeeList;
-//    }
     public int getId() {
         return id;  // Get department ID
     }
