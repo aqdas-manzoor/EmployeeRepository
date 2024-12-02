@@ -1,4 +1,4 @@
-package model;
+package com.model;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
-
-import static java.lang.reflect.Array.get;
 
 public class EmployeeApp {
 
@@ -126,43 +124,19 @@ public class EmployeeApp {
         employee.setNumber(number);
         System.out.println("number: " + employee.getNumber());
 
-//        String addressType = getValidStringInput(scanner, "Enter Address Type: ");
-//        employee.getAddress().add(addressType);
-//        System.out.println("State: " + employee.getAddress().get(addressType));
-//        employee.getAddress().setAddressType(addressType);
-//
-//        String street = getValidStringInput(scanner, "Enter street: ");
-//        employee.getAddress().setStreet(street);
-//        System.out.println("street: " + employee.getAddress().getStreet());
-//
-//        String city = getValidStringInput(scanner, "Enter city: ");
-//        employee.getAddress().setCity(city);
-//        System.out.println("City: " + employee.getAddress().getCity());
-//
-//
-//        String state = getValidStringInput(scanner, "Enter state: ");
-//        employee.getAddress().setState(state);
-//        System.out.println("State: " + employee.getAddress().getState());
-//
-//        int zipCode = getValidIntInput(scanner, "Enter zip code: ");
-//        employee.getAddress().setZipCode(zipCode);
-//        System.out.println("Zip Code: " + employee.getAddress().getZipCode());
-
         // Add addresses using Employee's method
         boolean addingAddresses = true;
         while (addingAddresses) {
-            // Collect address details
+
             String addressType = getValidStringInput(scanner, "Enter Address Type (e.g., Home, Office, Private, Public): ");
             String street = getValidStringInput(scanner, "Enter street: ");
             String city = getValidStringInput(scanner, "Enter city: ");
             String state = getValidStringInput(scanner, "Enter state: ");
             int zipCode = getValidIntInput(scanner, "Enter zip code: ");
 
-            // Use Employee's method to add the address
             employee.addAddressFromInput(addressType, street, city, state, zipCode);
             System.out.println("Address added!");
 
-            // Ask if the user wants to add another address
             String continueAdding = getValidStringInput(scanner, "Would you like to add another address? (yes/no): ");
             if (!continueAdding.equalsIgnoreCase("yes")) {
                 addingAddresses = false;
@@ -180,23 +154,47 @@ public class EmployeeApp {
             System.out.println("---");
         }
 
-        String department = getValidStringInput(scanner, "Enter department name: ");
-        employee.getDepartment().setDepartmentName(department);
-        System.out.println("Department Name: " + employee.getDepartment().getDepartmentName());
+        // Add Departments (Composition)
+        boolean addingDepartments = true;
+        while (addingDepartments) {
+            System.out.print("Enter department name: ");
+            String deptName = scanner.nextLine();
+            employee.addDepartment(deptName);  // Add department to employee
+
+            System.out.print("Do you want to add another department? (yes/no): ");
+            if (!scanner.nextLine().equalsIgnoreCase("yes")) {
+                addingDepartments = false;
+            }
+        }
+        System.out.println("\nEmployee Departments:");
+        for (Department dept : employee.getDepartment()) {
+            System.out.println("Department: " + dept.getDepartmentName());
+        }
 
         try {
-           int departmentId = DatabaseConnection.insertDepartment(employee.getDepartment());
-            if (departmentId == -1) {
-                System.out.println("Failed to insert department.");
-                return;
-            }
-            int employeeId = DatabaseConnection.insertEmployee(employee, departmentId);
+            int employeeId = DatabaseConnection.insertEmployee(employee);
+
             if (employeeId != -1) {
                 for (Address addr : employee.getAddress()) {
                     DatabaseConnection.insertAddress(addr, employeeId);
                 }
-                System.out.println("Employee and Address details successfully inserted into the database!");
+
+                for (Department dept : employee.getDepartment()) {
+                    int departmentId = DatabaseConnection.insertDepartment(dept);
+
+                    if (departmentId != -1) {
+                        dept.setId(departmentId);
+                    } else {
+                        System.out.println("Failed to insert department: " + dept.getDepartmentName());
+                    }
+                }
+                DatabaseConnection.insertEmployeeDepartments(employeeId, employee.getDepartment());
+
+                System.out.println("Employee and associated details successfully inserted into the database!");
+
                 DatabaseConnection.displayEmployeeDetails(employeeId);
+                DatabaseConnection.displayEmployeeAddresses(employeeId);
+                DatabaseConnection.displayEmployeesByDepartment();
             } else {
                 System.out.println("Failed to insert employee.");
             }
@@ -204,6 +202,5 @@ public class EmployeeApp {
             e.printStackTrace();
             System.out.println("Error inserting data into the database.");
         }
-    }
 
-}
+}}

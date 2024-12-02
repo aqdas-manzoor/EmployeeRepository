@@ -1,4 +1,4 @@
-package model;
+package com.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,11 @@ public class Employee {
     private String number;
     private String email;
     private List<Address> address;
-    private Department department;
+    private List<Department> departmentList;
 
     public Employee() {
         address = new ArrayList<>();
-        department = new Department();
+        departmentList = new ArrayList<>();
     }
 
     public void setSalary(int salary) {
@@ -70,10 +70,14 @@ public class Employee {
         address.setZipCode(zipCode);
         this.address.add(address);
     }
-    public Department getDepartment() {
-        return department;
+
+    public List<Department> getDepartment() {
+        return departmentList;
     }
 
-
+    public void addDepartment(String departmentName) {
+        Department department = new Department();
+        department.setDepartmentName(departmentName);
+        this.departmentList.add(department);
+    }
 }
-
