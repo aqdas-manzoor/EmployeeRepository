@@ -1,10 +1,27 @@
 package com.model;
 
-import java.util.List;
 
 public class Department {
     private int id;
     private String departmentName;
+    private String departmentEmail;
+    private String departmentDescription;
+
+    public String getDepartmentDescription() {
+        return departmentDescription;
+    }
+
+    public String getDepartmentEmail() {
+        return departmentEmail;
+    }
+
+    public void setDepartmentDescription(String departmentDescription) {
+        this.departmentDescription = departmentDescription;
+    }
+
+    public void setDepartmentEmail(String departmentEmail) {
+        this.departmentEmail = departmentEmail;
+    }
 
     public String getDepartmentName() {
 
@@ -16,11 +33,11 @@ public class Department {
     }
 
     public int getId() {
-        return id;  // Get department ID
+        return id;
     }
 
     public void setId(int id) {
-        this.id = id;  // Set department ID
+        this.id = id;
     }
 
 }

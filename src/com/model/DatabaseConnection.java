@@ -71,11 +71,13 @@ public class DatabaseConnection {
 
     // Insert department into the departments table
     public static int insertDepartment(Department department) throws SQLException {
-        String query = "INSERT INTO departments (department_name) VALUES (?)";
+        String query = "INSERT INTO departments (department_name,department_email,department_description) VALUES (?,?,?)";
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, department.getDepartmentName());
+            stmt.setString(2, department.getDepartmentEmail());
+            stmt.setString(3, department.getDepartmentDescription());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -92,7 +94,7 @@ public class DatabaseConnection {
 
     public static void displayEmployeeDetails(int employeeId) throws SQLException {
         String query = "SELECT e.id, \n" + " e.name, \n" + " e.age, \n" + " e.salary, \n" + " e.email, \n" +
-                "  GROUP_CONCAT(DISTINCT d.department_name ORDER BY d.department_name) AS department_names,\n" +
+                "  GROUP_CONCAT(DISTINCT d.department_name,d.department_email,d.department_description ORDER BY d.department_name) AS department_names,\n" +
                 "  GROUP_CONCAT(DISTINCT CONCAT(a.address_type, ': ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ', a.phone_number) \n" +
                 "  ORDER BY a.address_type SEPARATOR ' | ') AS addresses\n" +
                 "FROM employees e\n" +

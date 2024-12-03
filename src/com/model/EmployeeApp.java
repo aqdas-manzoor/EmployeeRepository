@@ -129,7 +129,7 @@ public class EmployeeApp {
             String street = getValidStringInput(scanner, "Enter street: ");
             String city = getValidStringInput(scanner, "Enter city: ");
             String state = getValidStringInput(scanner, "Enter state: ");
-            String number = getValidStringInput(scanner, "Enter number: ");
+            String number = getValidPhoneNumber(scanner, "Enter number: ");
             int zipCode = getValidIntInput(scanner, "Enter zip code: ");
 
             employee.addAddressFromInput(addressType, street, city, state, number,zipCode);
@@ -153,21 +153,29 @@ public class EmployeeApp {
             System.out.println("---");
         }
 
-        // Add Departments (Composition)
-        boolean addingDepartments = true;
-        while (addingDepartments) {
-            System.out.print("Enter department name: ");
-            String deptName = scanner.nextLine();
-            employee.addDepartment(deptName);  // Add department to employee
+        // Add addresses using Employee's method
+        boolean addingDepartment = true;
+        while (addingDepartment) {
 
-            System.out.print("Do you want to add another department? (yes/no): ");
-            if (!scanner.nextLine().equalsIgnoreCase("yes")) {
-                addingDepartments = false;
+            String departmentName = getValidStringInput(scanner, "Enter Department Name: ");
+            String departmentEmail = getValidEmailInput(scanner, "Enter department Email: ");
+            String departmentDescription = getValidStringInput(scanner, "Enter department description: ");
+
+            employee.addDepartment(departmentName, departmentEmail, departmentDescription);
+            System.out.println("Department added!");
+
+            String continueAdding = getValidStringInput(scanner, "Would you like to add another department? (yes/no): ");
+            if (!continueAdding.equalsIgnoreCase("yes")) {
+                addingDepartment = false;
             }
         }
+
         System.out.println("\nEmployee Departments:");
-        for (Department dept : employee.getDepartment()) {
-            System.out.println("Department: " + dept.getDepartmentName());
+        for (Department department : employee.getDepartment()) {
+            System.out.println("Department Name: " + department.getDepartmentName());
+            System.out.println("Department Email: " + department.getDepartmentEmail());
+            System.out.println("Department Description: " + department.getDepartmentDescription());
+            System.out.println("---");
         }
 
         try {

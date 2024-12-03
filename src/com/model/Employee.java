@@ -67,9 +67,11 @@ public class Employee {
         return departmentList;
     }
 
-    public void addDepartment(String departmentName) {
+    public void addDepartment(String departmentName,String departmentEmail, String departmentDescription) {
         Department department = new Department();
         department.setDepartmentName(departmentName);
+        department.setDepartmentEmail(departmentEmail);
+        department.setDepartmentDescription(departmentDescription);
         this.departmentList.add(department);
     }
 }
