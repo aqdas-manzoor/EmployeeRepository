@@ -94,7 +94,7 @@ public class DatabaseConnection {
 
     public static void displayEmployeeDetails(int employeeId) throws SQLException {
         String query = "SELECT e.id, \n" + " e.name, \n" + " e.age, \n" + " e.salary, \n" + " e.email, \n" +
-                "  GROUP_CONCAT(DISTINCT d.department_name,d.department_email,d.department_description ORDER BY d.department_name) AS department_names,\n" +
+                "  GROUP_CONCAT(DISTINCT d.department_name,' ',d.department_email,' ',d.department_description ORDER BY d.department_name) AS department_names,\n" +
                 "  GROUP_CONCAT(DISTINCT CONCAT(a.address_type, ': ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ', a.phone_number) \n" +
                 "  ORDER BY a.address_type SEPARATOR ' | ') AS addresses\n" +
                 "FROM employees e\n" +
