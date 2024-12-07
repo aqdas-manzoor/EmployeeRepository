@@ -3,16 +3,39 @@ package com.model;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * DatabaseConnection is a utility class that provides methods to interact with the EmployeeDB database.
+ * It includes methods to insert employee data, insert employee-department relationships,
+ * insert addresses, and display employee details and related information from the database.
+ */
 public class DatabaseConnection {
+
+    /** Database connection URL */
     private static final String URL = "jdbc:mysql://localhost:3306/EmployeeDB";
+
+    /** Database connection username */
     private static final String USER = "root";
+
+    /** Database connection password */
     private static final String PASSWORD = "aqdas@2710";
 
-
+    /**
+     * Establishes and returns a connection to the database.
+     *
+     * @return A {@link Connection} object connected to the EmployeeDB database.
+     * @throws SQLException If a database access error occurs.
+     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
+    /**
+     * Inserts an employee into the employees table.
+     *
+     * @param employee The employee object containing the data to insert.
+     * @return The generated employee ID if the insertion is successful, otherwise -1.
+     * @throws SQLException If a database access error occurs.
+     */
     public static int insertEmployee(Employee employee) throws SQLException {
         String query = "INSERT INTO employees (name, age, salary, email) VALUES (?, ?, ?, ?)";
         try (Connection connection = getConnection();
@@ -23,20 +46,25 @@ public class DatabaseConnection {
             stmt.setInt(3, employee.getSalary());
             stmt.setString(4, employee.getEmail());
 
-
             int affectedRows = stmt.executeUpdate();
 
             if (affectedRows > 0) {
                 var rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
-                    return rs.getInt(1);
+                    return rs.getInt(1);  // Return the generated employee ID
                 }
             }
         }
-        return -1;
+        return -1;  // Return -1 if insertion fails
     }
 
-    // Insert employee-department relationships into employee_departments table
+    /**
+     * Inserts the relationships between an employee and their departments into the employee_departments table.
+     *
+     * @param employeeId The ID of the employee.
+     * @param departmentList The list of departments associated with the employee.
+     * @throws SQLException If a database access error occurs.
+     */
     public static void insertEmployeeDepartments(int employeeId, List<Department> departmentList) throws SQLException {
         String query = "INSERT INTO employee_departments (employee_id, department_id) VALUES (?, ?)";
         try (Connection connection = getConnection();
@@ -45,15 +73,22 @@ public class DatabaseConnection {
             for (Department department : departmentList) {
                 stmt.setInt(1, employeeId);
                 stmt.setInt(2, department.getId());
-                stmt.addBatch();
+                stmt.addBatch();  // Add batch for each department
             }
 
             stmt.executeBatch();  // Execute all insert statements in batch
         }
     }
 
+    /**
+     * Inserts an address for an employee into the address table.
+     *
+     * @param address The address object containing the data to insert.
+     * @param employeeId The ID of the employee.
+     * @throws SQLException If a database access error occurs.
+     */
     public static void insertAddress(Address address, int employeeId) throws SQLException {
-        String query = "INSERT INTO address (employee_id, street, city, state, zip_code,address_type,phone_number) VALUES (?, ?, ?, ?, ?,?,?)";
+        String query = "INSERT INTO address (employee_id, street, city, state, zip_code, address_type, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -65,13 +100,19 @@ public class DatabaseConnection {
             stmt.setString(6, address.getAddressType());
             stmt.setString(7, address.getNumber());
 
-            stmt.executeUpdate();
+            stmt.executeUpdate();  // Execute the insert statement
         }
     }
 
-    // Insert department into the departments table
+    /**
+     * Inserts a department into the departments table.
+     *
+     * @param department The department object containing the data to insert.
+     * @return The generated department ID if the insertion is successful, otherwise -1.
+     * @throws SQLException If a database access error occurs.
+     */
     public static int insertDepartment(Department department) throws SQLException {
-        String query = "INSERT INTO departments (department_name,department_email,department_description) VALUES (?,?,?)";
+        String query = "INSERT INTO departments (department_name, department_email, department_description) VALUES (?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -88,20 +129,24 @@ public class DatabaseConnection {
                 }
             }
         }
-        return -1;
+        return -1;  // Return -1 if insertion fails
     }
 
-
+    /**
+     * Retrieves and displays the details of an employee (including their departments and addresses).
+     *
+     * @param employeeId The ID of the employee whose details are to be displayed.
+     * @throws SQLException If a database access error occurs.
+     */
     public static void displayEmployeeDetails(int employeeId) throws SQLException {
-        String query = "SELECT e.id, \n" + " e.name, \n" + " e.age, \n" + " e.salary, \n" + " e.email, \n" +
-                "  GROUP_CONCAT(DISTINCT d.department_name,' ',d.department_email,' ',d.department_description ORDER BY d.department_name) AS department_names,\n" +
-                "  GROUP_CONCAT(DISTINCT CONCAT(a.address_type, ': ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ', a.phone_number) \n" +
-                "  ORDER BY a.address_type SEPARATOR ' | ') AS addresses\n" +
-                "FROM employees e\n" +
-                "LEFT JOIN employee_departments ed ON e.id = ed.employee_id\n" +
-                "LEFT JOIN departments d ON ed.department_id = d.id\n" +
-                "LEFT JOIN address a ON e.id = a.employee_id\n" +
-                "WHERE e.id = ?\n" +
+        String query = "SELECT e.id, e.name, e.age, e.salary, e.email, " +
+                "GROUP_CONCAT(DISTINCT d.department_name, ' ', d.department_email, ' ', d.department_description ORDER BY d.department_name) AS department_names, " +
+                "GROUP_CONCAT(DISTINCT CONCAT(a.address_type, ': ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ', a.phone_number) ORDER BY a.address_type SEPARATOR ' | ') AS addresses " +
+                "FROM employees e " +
+                "LEFT JOIN employee_departments ed ON e.id = ed.employee_id " +
+                "LEFT JOIN departments d ON ed.department_id = d.id " +
+                "LEFT JOIN address a ON e.id = a.employee_id " +
+                "WHERE e.id = ? " +
                 "GROUP BY e.id";
 
         try (Connection connection = getConnection();
@@ -131,7 +176,12 @@ public class DatabaseConnection {
         }
     }
 
-
+    /**
+     * Displays all the addresses of a particular employee.
+     *
+     * @param employeeId The ID of the employee whose addresses are to be displayed.
+     * @throws SQLException If a database access error occurs.
+     */
     public static void displayEmployeeAddresses(int employeeId) throws SQLException {
         String query = "SELECT e.id, e.name, " +
                 "GROUP_CONCAT(CONCAT(a.address_type, ' ', a.street, ', ', a.city, ', ', a.state, ' ', a.zip_code, ' ' ,a.phone_number) " +
@@ -163,6 +213,12 @@ public class DatabaseConnection {
             }
         }
     }
+
+    /**
+     * Displays all employees grouped by their departments.
+     *
+     * @throws SQLException If a database access error occurs.
+     */
     public static void displayEmployeesByDepartment() throws SQLException {
         String query = "SELECT d.department_name, " +
                 "GROUP_CONCAT(DISTINCT e.name ORDER BY e.name SEPARATOR ', ') AS employee_names " +
@@ -188,7 +244,4 @@ public class DatabaseConnection {
             }
         }
     }
-
-
 }
-

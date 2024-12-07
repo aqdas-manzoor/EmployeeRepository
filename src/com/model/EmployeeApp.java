@@ -7,10 +7,19 @@ import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
 
+/**
+ * This class provides an application for managing employee details, including collecting
+ * personal information, adding addresses and departments, and inserting data into the database.
+ */
 public class EmployeeApp {
 
+    /** Properties object to load validation configurations */
     private static Properties properties = new Properties();
 
+    /**
+     * Static block to load the validation properties file from the resources folder.
+     * This file contains regex patterns for email, phone number, etc.
+     */
     static {
         try (InputStream input = new FileInputStream("src/resources/validation.properties")) {
             if (input != null) {
@@ -24,6 +33,13 @@ public class EmployeeApp {
         }
     }
 
+    /**
+     * Prompts the user for a valid integer input. Keeps asking until a valid integer is entered.
+     *
+     * @param scanner The scanner object to capture input from the user.
+     * @param prompt  The prompt to display to the user.
+     * @return The valid integer entered by the user.
+     */
     public static int getValidIntInput(Scanner scanner, String prompt) {
         int validInput = 0;
         boolean valid = false;
@@ -42,11 +58,18 @@ public class EmployeeApp {
         return validInput;
     }
 
-
+    /**
+     * Prompts the user for a valid email input. Keeps asking until a valid email is entered.
+     *
+     * @param scanner The scanner object to capture input from the user.
+     * @param prompt  The prompt to display to the user.
+     * @return The valid email entered by the user.
+     */
     public static String getValidEmailInput(Scanner scanner, String prompt) {
         String validEmail = "";
         boolean valid = false;
 
+        // Retrieve the email regex pattern from the properties file
         String emailRegex = properties.getProperty("email.regex");
 
         while (!valid) {
@@ -62,16 +85,20 @@ public class EmployeeApp {
         return validEmail;
     }
 
-
+    /**
+     * Prompts the user for a valid string input. Keeps asking until a non-empty string is entered.
+     *
+     * @param scanner The scanner object to capture input from the user.
+     * @param prompt  The prompt to display to the user.
+     * @return The valid non-empty string entered by the user.
+     */
     public static String getValidStringInput(Scanner scanner, String prompt) {
         String validInput = "";
         boolean valid = false;
 
-
         while (!valid) {
             System.out.print(prompt);
             validInput = scanner.nextLine().trim();
-
 
             if (validInput.isEmpty()) {
                 System.out.println("Invalid input. Please enter a non-empty string.");
@@ -82,6 +109,14 @@ public class EmployeeApp {
         return validInput;
     }
 
+    /**
+     * Prompts the user for a valid phone number. Keeps asking until a valid phone number is entered.
+     * The phone number must match the regex for a valid number with a country code (+92) and 10 digits.
+     *
+     * @param scanner The scanner object to capture input from the user.
+     * @param prompt  The prompt to display to the user.
+     * @return The valid phone number entered by the user.
+     */
     public static String getValidPhoneNumber(Scanner scanner, String prompt) {
         String phoneNumber;
         String phoneRegex = properties.getProperty("phone.regex");
@@ -95,31 +130,40 @@ public class EmployeeApp {
             } else {
                 System.out.println("Invalid phone number. Please enter a valid phone number with country code +92 and 10 valid digits.");
             }
-
         }
-
     }
 
+    /**
+     * The main method to run the application. It prompts the user to enter various details
+     * about the employee, including personal details, addresses, and departments,
+     * and inserts these details into the database.
+     *
+     * @param args Command-line arguments (not used in this application).
+     */
     public static void main(String[] args) {
 
         Employee employee = new Employee();
         Scanner scanner = new Scanner(System.in);
+
+        // Collect employee name
         String name = getValidStringInput(scanner, "Enter name: ");
         employee.setName(name);
         System.out.println("Name " + employee.getName());
 
+        // Collect employee age
         int age = getValidIntInput(scanner, "Enter age: ");
         employee.setAge(age);
         System.out.println("Age: " + employee.getAge());
 
+        // Collect employee salary
         int salary = getValidIntInput(scanner, "Enter salary: ");
         employee.setSalary(salary);
         System.out.println("salary: " + employee.getSalary());
 
+        // Collect employee email
         String email = getValidEmailInput(scanner, "Enter Email: ");
         employee.setEmail(email);
         System.out.println("email: " + employee.getEmail());
-
 
         // Add addresses using Employee's method
         boolean addingAddresses = true;
@@ -132,7 +176,7 @@ public class EmployeeApp {
             String number = getValidPhoneNumber(scanner, "Enter number: ");
             int zipCode = getValidIntInput(scanner, "Enter zip code: ");
 
-            employee.addAddressFromInput(addressType, street, city, state, number,zipCode);
+            employee.addAddressFromInput(addressType, street, city, state, number, zipCode);
             System.out.println("Address added!");
 
             String continueAdding = getValidStringInput(scanner, "Would you like to add another address? (yes/no): ");
@@ -153,7 +197,7 @@ public class EmployeeApp {
             System.out.println("---");
         }
 
-        // Add addresses using Employee's method
+        // Add departments using Employee's method
         boolean addingDepartment = true;
         while (addingDepartment) {
 
@@ -170,6 +214,7 @@ public class EmployeeApp {
             }
         }
 
+        // Print all added departments
         System.out.println("\nEmployee Departments:");
         for (Department department : employee.getDepartment()) {
             System.out.println("Department Name: " + department.getDepartmentName());
@@ -178,6 +223,7 @@ public class EmployeeApp {
             System.out.println("---");
         }
 
+        // Insert employee and associated details into the database
         try {
             int employeeId = DatabaseConnection.insertEmployee(employee);
 
@@ -209,5 +255,5 @@ public class EmployeeApp {
             e.printStackTrace();
             System.out.println("Error inserting data into the database.");
         }
-
-}}
+    }
+}
