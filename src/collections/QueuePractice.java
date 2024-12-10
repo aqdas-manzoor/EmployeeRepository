@@ -8,7 +8,24 @@ public class QueuePractice {
         Queue<Integer> queue = new PriorityQueue<>();
         queue.add(1);
         queue.add(2);
+        queue.offer(3);
         System.out.println(queue);
+/**
+ * poll and remove both remove and return the element
+ */
+        queue.poll();
+        System.out.println(queue);
+        queue.remove();
+        System.out.println(queue);
+
+/**
+ * peek() and element(): return first element without removing it
+ */
+        queue.add(5);
+        Integer peek=queue.peek();
+        System.out.println(peek);
+        Integer ele=queue.element();
+        System.out.println(ele);
 
         Queue<Integer> queue2 = new LinkedList<>();
         queue2.add(1);

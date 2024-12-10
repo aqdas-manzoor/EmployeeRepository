@@ -10,13 +10,9 @@ import java.util.List;
  */
 public class DatabaseConnection {
 
-    /** Database connection URL */
+    /** Database connection URL,username,password */
     private static final String URL = "jdbc:mysql://localhost:3306/EmployeeDB";
-
-    /** Database connection username */
     private static final String USER = "root";
-
-    /** Database connection password */
     private static final String PASSWORD = "aqdas@2710";
 
     /**
