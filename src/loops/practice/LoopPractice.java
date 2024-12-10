@@ -23,8 +23,31 @@ public class LoopPractice {
         while (x < list.size()) {
             System.out.println(list.get(x));
             x++;
+            System.out.println("---");
         }
 
+        int[] array= {1,2,4,6,7,8};
+        int max = array[0];
+        int secondMax = Integer.MIN_VALUE;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > max) {
+                secondMax = max;
+                max = array[i];
+            }
+        }
+        System.out.println(max);
+        System.out.println(secondMax);
 
+
+        String str="Hello World";
+        String reversedStr= "";
+
+        for(int i=str.length()-1;i>=0;i--){
+            reversedStr+=str.charAt(i);
+        }
+        System.out.println(reversedStr);
     }
+
+
+
 }
